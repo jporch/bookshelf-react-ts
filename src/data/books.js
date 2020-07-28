@@ -23,7 +23,7 @@ export const books = [
         "id": "djkoe3o2",
         "title": "A Secular Age",
         "author": "Charles Taylor",
-        "categories": [],
+        "categories": ["Philosophy"],
         "isbn": "",
         "owned_physical": "",
         "owned_digital": "",
