@@ -1,4 +1,4 @@
-const books = [
+export const books = [
     {
         "id": "xgkq2k69",
         "title": "A People’s History of Computing in the United States",
@@ -1982,5 +1982,3 @@ const books = [
         "lastUpdate": "2020-07-27 16:58:39.443947"
     }
 ];
-
-export default books;

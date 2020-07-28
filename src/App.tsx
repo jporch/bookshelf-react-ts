@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import books from './data/books.js';
+import {books as books_data} from './data/books.js';
+const sleep = (milliseconds: number) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 
 type book = {
   id: string,
@@ -14,10 +18,26 @@ type book = {
 }
 
 type BookListProps = {
-  books: book[]
+  initialBooks: book[]
 }
 
-function BookList({ books }: BookListProps) {
+function BookList({initialBooks}: BookListProps) {
+  const [books, setBooks] = useState(initialBooks);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await sleep(1000);  //Simulates API lag
+      setBooks(books_data);
+    }
+    fetchData();
+  }, []);
+  
+  if (books.length === 0) {
+    return(
+      <div>Loading.....</div>
+    );
+  }
+
   return (
     <div>{
     books.map(
@@ -127,7 +147,7 @@ function App() {
   return (
     <div className="App">
       <Banner name="My Bookshelf"/>
-      <BookList books={books}/>
+      <BookList initialBooks={[] as book[]}/>
     </div>
   );
 }
