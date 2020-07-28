@@ -1,26 +1,136 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import books from './data/books.js';
+
+type book = {
+  id: string,
+  title: string,
+  author: string,
+  categories: string[],
+  isbn: string,
+  owned_physical: string,
+  owned_digital: string,
+  lastUpdate: string
+}
+
+type BookListProps = {
+  books: book[]
+}
+
+function BookList({ books }: BookListProps) {
+  return (
+    <div>{
+    books.map(
+      (book, index) => <Book key={"book_"+index} book={book}/>
+    )}
+    </div>
+    );
+}
+
+type BookProps = {
+  book: book
+}
+
+function Book({ book }: BookProps) {
+  return (
+    <div className="book">
+      <Title name={book.title}/>
+      <Author name={book.author}/>
+      <ISBN isbn={book.isbn}/>
+      <CategoryList bookID={book.id} categories={book.categories}/>
+      <Owned physical={book.owned_physical} digital={book.owned_digital} />
+    </div>
+  );
+}
+
+type BannerProps = {
+  name: string
+}
+
+function Banner({ name }: BannerProps) {
+  return(
+  <h1>{name}</h1>
+  );
+}
+
+type TitleProps = {
+  name: string
+}
+
+function Title({ name }: TitleProps) {
+  return(
+    <h2>{name}</h2>
+  );
+}
+
+type AuthorProps = {
+  name: string
+}
+
+function Author({ name }: AuthorProps ) {
+  return(
+    <div>by<br/>{name}</div>
+  );
+}
+
+type ISBNProps = {
+  isbn: string
+}
+
+function ISBN({ isbn }: ISBNProps ) {
+  console.log(isbn);
+  return(
+    isbn ? <div>ISBN: {isbn}</div> : null
+  );
+}
+
+type CategoryListProps = {
+  bookID: string,
+  categories: string[]
+}
+
+function CategoryList({ bookID, categories }: CategoryListProps) {
+  return(
+    categories.length > 0 ? <div>Categories: {categories.map((cat, index) => <Category id={bookID+"_cat_"+index} category={cat}/>)}</div> : null
+  );
+}
+
+type CategoryProps = {
+  id: string,
+  category: string
+}
+
+function Category({ category }: CategoryProps) {
+  return(
+  <span className="category-entry">{category}</span>
+  );
+}
+
+type OwnedProps = {
+  physical: string,
+  digital: string
+}
+
+function Owned({ physical, digital }: OwnedProps) {
+  if (physical || digital) {
+    return(
+      <div>Owned? 
+        {physical ? <span className="owned-entry">Physical</span>:null}
+        {digital ? <span className="owned-entry">Digital</span>:null}
+      </div>
+    );
+  }
+  return(null);
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Banner name="My Bookshelf"/>
+      <BookList books={books}/>
     </div>
   );
 }
 
 export default App;
+
