@@ -23,6 +23,7 @@ type BookListProps = {
   
 function BookList({initialBooks}: BookListProps) {
     const [books, setBooks] = useState(initialBooks);
+    const [filters, setFilters] = useState({});
   
     useEffect(() => {
         const fetchData = async () => {
@@ -31,18 +32,80 @@ function BookList({initialBooks}: BookListProps) {
         }
         fetchData();
     }, []);
-    
+
+    useEffect(() => {
+        if (!('title' in filters)) return;
+        setBooks(books_data.filter((book)=>book.title.toLowerCase().includes(filters['title'])));
+    }, [filters]);
+
+  
+    return (
+        <div>
+            <Controls filters={filters} handler={setFilters}/>
+            <List books={books}/>
+        </div>
+    );
+}
+
+type ControlsProps = {
+    filters: Object,
+    handler: Function
+}
+
+function Controls({filters, handler}: ControlsProps) {
+    const [titleSearchTerm, setTitleSearchTerm] = useState("");
+
+    useEffect(() => {
+        handler({title:titleSearchTerm.toLowerCase()});
+    },[titleSearchTerm,handler]);
+
+    return(
+        <div className="controls">
+            <TitleSearch title={titleSearchTerm} handler={setTitleSearchTerm}/>
+            <FilterDisplay filters={filters}/>
+        </div>
+    );
+}
+
+type TitleSearchProps = {
+    title: string,
+    handler: Function
+}
+function TitleSearch({title, handler}:TitleSearchProps) {
+
+
+    const handleChange = (e:any) => {handler(e.target.value);};
+    return(
+        <div>Title: <input type="text" value={title} onChange={handleChange} placeholder="Title"/></div>
+    );
+}
+
+type FilterDisplayProps = {
+    filters: Object
+}
+function FilterDisplay({filters}:FilterDisplayProps) {
+    return(
+        <div className="filter-list">
+        {Object.entries(filters).map((filter) => filter[1] && <span className="filter-entry">{filter[0]}:{filter[1]}</span>)}
+        </div>
+    );
+}
+
+
+type ListProps = {
+    books: book[]
+}
+function List({ books }: ListProps) {
     if (books.length === 0) {
         return(
-            <div>Loading.....</div>
+            <div className="book-list">Loading.....</div>
         );
     }
   
     return (
-        <div className="bookList">{
-            books.map(
-            (book, index) => <Book key={"book_"+index} book={book}/>
-        )}</div>
+        <div className="book-list">{
+            books.map((book, index) => <Book key={"book_"+index} book={book}/>)
+        }</div>
     );
 }
 
