@@ -99,12 +99,11 @@ type CategoryListProps = {
   
 function CategoryList({ bookID, categories }: CategoryListProps) {
     return(
-        categories.length > 0 ? <div>Categories: {categories.map((cat, index) => <Category id={bookID+"_cat_"+index} category={cat}/>)}</div> : null
+        categories.length > 0 ? <div>Categories: {categories.map((cat, index) => <Category key={bookID+"_cat_"+index} category={cat}/>)}</div> : null
     );
 }
 
 type CategoryProps = {
-    id: string,
     category: string
 }
   
