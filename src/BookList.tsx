@@ -39,7 +39,7 @@ function BookList({initialBooks}: BookListProps) {
     }
   
     return (
-        <div>{
+        <div className="bookList">{
             books.map(
             (book, index) => <Book key={"book_"+index} book={book}/>
         )}</div>

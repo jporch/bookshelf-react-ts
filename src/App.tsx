@@ -8,7 +8,7 @@ type BannerProps = {
 
 function Banner({ name }: BannerProps) {
   return(
-  <h1>{name}</h1>
+  <h1 className="banner">{name}</h1>
   );
 }
 
