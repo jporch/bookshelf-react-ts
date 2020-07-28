@@ -1,7 +1,7 @@
 export const books = [
     {
         "id": "xgkq2k69",
-        "title": "A People’s History of Computing in the United States",
+        "title": "A People's History of Computing in the United States",
         "author": "Joy Lisi Rankin",
         "categories": ["History","Technology"],
         "isbn": "",
@@ -191,7 +191,7 @@ export const books = [
     },
     {
         "id": "l6z69gzj",
-        "title": "Better: A Surgeon’s Notes on Performance",
+        "title": "Better: A Surgeon's Notes on Performance",
         "author": "Atul Gawande",
         "categories": [],
         "isbn": "",
@@ -1111,7 +1111,7 @@ export const books = [
     },
     {
         "id": "epz7g0z8",
-        "title": "Sacred Liberty: America’s Long, Bloody and Ongoing Struggle for Religious Freedom",
+        "title": "Sacred Liberty: America's Long, Bloody and Ongoing Struggle for Religious Freedom",
         "author": "Steven Waldman",
         "categories": [],
         "isbn": "",
@@ -1371,7 +1371,7 @@ export const books = [
     },
     {
         "id": "013pq6k9",
-        "title": "The Efficiency Paradox: What Big Data Can’t Do",
+        "title": "The Efficiency Paradox: What Big Data Can't Do",
         "author": "Edward Tenner",
         "categories": [],
         "isbn": "",
@@ -1811,7 +1811,7 @@ export const books = [
     },
     {
         "id": "0w3y5nke",
-        "title": "Unteachable Lessons: Why Wisdom Can’t Be Taught (And Why That’s Okay)",
+        "title": "Unteachable Lessons: Why Wisdom Can't Be Taught (And Why That's Okay)",
         "author": "Carl McColman",
         "categories": [],
         "isbn": "",
