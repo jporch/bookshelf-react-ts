@@ -34,8 +34,11 @@ function BookList({initialBooks}: BookListProps) {
     }, []);
 
     useEffect(() => {
-        if (!('title' in filters)) return;
-        setBooks(books_data.filter((book)=>book.title.toLowerCase().includes(filters['title'])));
+        let b = books_data;
+        if ("title" in filters) b = b.filter((book)=>book.title.toLowerCase().includes(filters['title']));
+        if ("author" in filters) b = b.filter((book)=>book.author.toLowerCase().includes(filters['author']));
+
+        setBooks(b);
     }, [filters]);
 
   
@@ -54,14 +57,20 @@ type ControlsProps = {
 
 function Controls({filters, handler}: ControlsProps) {
     const [titleSearchTerm, setTitleSearchTerm] = useState("");
+    const [authorSearchTerm, setAuthorSearchTerm] = useState("");
 
     useEffect(() => {
-        handler({title:titleSearchTerm.toLowerCase()});
-    },[titleSearchTerm,handler]);
+
+        handler({
+            title:titleSearchTerm.toLowerCase(),
+            author:authorSearchTerm.toLowerCase()
+        });
+    },[titleSearchTerm,authorSearchTerm,handler]);
 
     return(
         <div className="controls">
             <TitleSearch title={titleSearchTerm} handler={setTitleSearchTerm}/>
+            <AuthorSearch author={authorSearchTerm} handler={setAuthorSearchTerm}/>
             <FilterDisplay filters={filters}/>
         </div>
     );
@@ -80,13 +89,26 @@ function TitleSearch({title, handler}:TitleSearchProps) {
     );
 }
 
+type AuthorSearchProps = {
+    author: string,
+    handler: Function
+}
+function AuthorSearch({author, handler}:AuthorSearchProps) {
+
+
+    const handleChange = (e:any) => {handler(e.target.value);};
+    return(
+        <div>Author: <input type="text" value={author} onChange={handleChange} placeholder="Author"/></div>
+    );
+}
+
 type FilterDisplayProps = {
     filters: Object
 }
 function FilterDisplay({filters}:FilterDisplayProps) {
     return(
         <div className="filter-list">
-        {Object.entries(filters).map((filter) => filter[1] && <span className="filter-entry">{filter[0]}:{filter[1]}</span>)}
+        {Object.entries(filters).map((filter) => filter[1] && <span key={filter[0]} className="filter-entry">{filter[0]}:{filter[1]}</span>)}
         </div>
     );
 }
