@@ -24,6 +24,7 @@ type BookListProps = {
 function BookList({initialBooks}: BookListProps) {
     const [booksData, setBooksData] = useState(books_data);
     const [books, setBooks] = useState(initialBooks);
+    const [categories, setCategories] = useState(new Set<string>());
     const [filters, setFilters] = useState({});
   
     useEffect(() => {
@@ -35,11 +36,17 @@ function BookList({initialBooks}: BookListProps) {
     }, []);
 
     useEffect(() => {
+        const cats = new Set(booksData.map(b => b.categories ).filter(b => b.length !== 0 ).flat(1));
+        setCategories(cats);
+    }, [booksData]);
+
+    useEffect(() => {
         let b = booksData;
         if ("title" in filters) b = b.filter((book)=>book.title.toLowerCase().includes(filters['title']));
         if ("author" in filters) b = b.filter((book)=>book.author.toLowerCase().includes(filters['author']));
         if ("owned" in filters && filters["owned"]["physical"] === "true") b = b.filter((book)=>book.owned_physical === "true");
         if ("owned" in filters && filters["owned"]["digital"] === "true") b = b.filter((book)=>book.owned_digital === "true");
+        if ("category" in filters && filters["category"]) b = b.filter((book)=>book.categories.includes(filters["category"]));
 
         setBooks(b);
     }, [filters,booksData]);
@@ -47,7 +54,7 @@ function BookList({initialBooks}: BookListProps) {
   
     return (
         <div>
-            <Controls filters={filters} handler={setFilters}/>
+            <Controls filters={filters} categories={categories} handler={setFilters}/>
             <List books={books}/>
         </div>
     );

@@ -4,28 +4,32 @@ import './BookList.tsx';
 
 type ControlsProps = {
     filters: Object,
+    categories: Set<string>,
     handler: Function
 }
 
-function Controls({filters, handler}: ControlsProps) {
+function Controls({filters, categories, handler}: ControlsProps) {
     const [titleSearchTerm, setTitleSearchTerm] = useState("");
     const [authorSearchTerm, setAuthorSearchTerm] = useState("");
     const [ownedSearchTerm, setOwnedSearchTerm] = useState({physical:"false",digital:"false" });
+    const [categorySearchTerm, setCategorySearchTerm] = useState("");
 
     useEffect(() => {
 
         handler({
             title:titleSearchTerm.toLowerCase(),
             author:authorSearchTerm.toLowerCase(),
-            owned:ownedSearchTerm
+            owned:ownedSearchTerm,
+            category:categorySearchTerm
         });
-    },[titleSearchTerm,authorSearchTerm,ownedSearchTerm,handler]);
+    },[titleSearchTerm,authorSearchTerm,ownedSearchTerm,categorySearchTerm,handler]);
 
     return(
         <div className="controls">
             <TitleSearch title={titleSearchTerm} handler={setTitleSearchTerm}/>
             <AuthorSearch author={authorSearchTerm} handler={setAuthorSearchTerm}/>
             <OwnedSearch physical={ownedSearchTerm['physical']} digital={ownedSearchTerm['digital']} handler={setOwnedSearchTerm}/>
+            <CategoriesSearch categories={categories} category={categorySearchTerm} handler={setCategorySearchTerm}/>
         </div>
     );
 }
@@ -48,7 +52,7 @@ type AuthorSearchProps = {
 function AuthorSearch({author, handler}:AuthorSearchProps) {
     const handleChange = (e:any) => {handler(e.target.value);};
     return(
-        <div>Author: <input type="text" value={author} onChange={handleChange} placeholder="Author"/></div>
+        <div>Author:&nbsp;<input type="text" value={author} onChange={handleChange} placeholder="Author"/></div>
     );
 }
 
@@ -69,8 +73,25 @@ function OwnedSearch({physical, digital, handler}:OwnedSearchProps) {
     
     return(
         <div className="owned-filters">
-            <span>Owned Physically: <input key="physical_checkbox" type="checkbox" checked={physical==="true"} onChange={handlePhysicalChange}/></span>
-            <span>Owned Digitally: <input key="digital_checkbox" type="checkbox" checked={digital==="true"} onChange={handleDigitalChange}/></span>
+            <div>Owned Physically:&nbsp;<input key="physical_checkbox" type="checkbox" checked={physical==="true"} onChange={handlePhysicalChange}/></div>
+            <div>Owned Digitally:&nbsp;<input key="digital_checkbox" type="checkbox" checked={digital==="true"} onChange={handleDigitalChange}/></div>
+        </div>
+    );
+}
+
+type CategorySearchProps = {
+    categories: Set<string>,
+    category: string,
+    handler: Function
+}
+function CategoriesSearch({categories, category, handler}:CategorySearchProps) {
+    const handleChange = (e:any) => {handler(e.target.value);};
+    return(
+        <div>Category:&nbsp; 
+            <select value={category} onChange={handleChange}>
+                <option value=""></option>
+                {Array.from(categories).map(c => <option value={c}>{c}</option>)}
+            </select>
         </div>
     );
 }

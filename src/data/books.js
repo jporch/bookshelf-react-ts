@@ -43,7 +43,7 @@ export const books = [
         "id": "8gke8knq",
         "title": "Abbadon's Gate",
         "author": "James S.A. Corey",
-        "categories": [],
+        "categories": ["Fiction"],
         "isbn": "",
         "owned_physical": "",
         "owned_digital": "true",
