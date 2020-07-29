@@ -38,9 +38,11 @@ function BookList({initialBooks}: BookListProps) {
         let b = booksData;
         if ("title" in filters) b = b.filter((book)=>book.title.toLowerCase().includes(filters['title']));
         if ("author" in filters) b = b.filter((book)=>book.author.toLowerCase().includes(filters['author']));
+        if ("owned" in filters && filters["owned"]["physical"] === "true") b = b.filter((book)=>book.owned_physical === "true");
+        if ("owned" in filters && filters["owned"]["digital"] === "true") b = b.filter((book)=>book.owned_digital === "true");
 
         setBooks(b);
-    }, [filters]);
+    }, [filters,booksData]);
 
   
     return (
@@ -57,7 +59,7 @@ type ListProps = {
 function List({ books }: ListProps) {
     if (books.length === 0) {
         return(
-            <div className="book-list">Loading.....</div>
+            <h2 className="book-list">No Results</h2>
         );
     }
   
