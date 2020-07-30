@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import './BookList.tsx';
 
-type ControlsProps = {
-    filters: Object,
-    categories: Set<string>,
-    handler: Function
+type filters = {
+    title: string,
+    author: string,
+    owned: {
+        physical: string,
+        digital: string
+    },
+    category: string
 }
 
-function Controls({filters, categories, handler}: ControlsProps) {
+type ControlsProps = {
+    filters: filters,
+    categories: Set<string>,
+    filterHandler: Function
+}
+
+function Controls({filters, categories, filterHandler}: ControlsProps) {
     const [titleSearchTerm, setTitleSearchTerm] = useState("");
     const [authorSearchTerm, setAuthorSearchTerm] = useState("");
     const [ownedSearchTerm, setOwnedSearchTerm] = useState({physical:"false",digital:"false" });
@@ -16,13 +26,13 @@ function Controls({filters, categories, handler}: ControlsProps) {
 
     useEffect(() => {
 
-        handler({
+        filterHandler({
             title:titleSearchTerm.toLowerCase(),
             author:authorSearchTerm.toLowerCase(),
             owned:ownedSearchTerm,
             category:categorySearchTerm
         });
-    },[titleSearchTerm,authorSearchTerm,ownedSearchTerm,categorySearchTerm,handler]);
+    },[titleSearchTerm,authorSearchTerm,ownedSearchTerm,categorySearchTerm,filterHandler]);
 
     return(
         <div className="controls">
