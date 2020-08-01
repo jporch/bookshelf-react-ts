@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Controls } from './Controls';
+import { Controls, emptyFilters } from './Controls';
 import {books as books_data} from './data/books.js';
 const sleep = (milliseconds: number) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -25,15 +25,7 @@ function BookList({initialBooks}: BookListProps) {
     const [booksData, setBooksData] = useState(books_data);
     const [books, setBooks] = useState(initialBooks);
     const [categories, setCategories] = useState(new Set<string>());
-    const [filters, setFilters] = useState({
-        title: "",
-        author: "",
-        owned: {
-            physical: "",
-            digital: ""
-        },
-        category: ""
-    });
+    const [filters, setFilters] = useState(emptyFilters);
   
     useEffect(() => {
         const fetchData = async () => {
@@ -52,8 +44,12 @@ function BookList({initialBooks}: BookListProps) {
         let b = booksData;
         b = b.filter((book)=>book.title.toLowerCase().includes(filters['title']));
         b = b.filter((book)=>book.author.toLowerCase().includes(filters['author']));
-        if (filters["owned"]["physical"] === "true") b = b.filter((book)=>book.owned_physical === "true");
-        if (filters["owned"]["digital"] === "true") b = b.filter((book)=>book.owned_digital === "true");
+
+        if (filters['owned'] === 'physical') b = b.filter((book)=>book.owned_physical === "true");
+        if (filters['owned'] === 'digital') b = b.filter((book)=>book.owned_digital === "true");
+        if (filters['owned'] === 'any') b = b.filter((book)=>book.owned_physical === "true" || book.owned_digital === "true");
+        if (filters['owned'] === 'all') b = b.filter((book)=>book.owned_physical === "true" && book.owned_digital === "true");
+        
         if (filters["category"]) b = b.filter((book)=>book.categories.includes(filters["category"]));
 
         setBooks(b);
