@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Controls, emptyFilters } from './Controls';
-import {books as books_data} from './data/books.js';
+//import {books as books_data} from './data/books.js';
 const sleep = (milliseconds: number) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
@@ -22,15 +22,15 @@ type BookListProps = {
 }
   
 function BookList({initialBooks}: BookListProps) {
-    const [booksData, setBooksData] = useState(books_data);
+    const [booksData, setBooksData] = useState(new Array<book>());
     const [books, setBooks] = useState(initialBooks);
     const [categories, setCategories] = useState(new Set<string>());
     const [filters, setFilters] = useState(emptyFilters);
   
     useEffect(() => {
         const fetchData = async () => {
-            await sleep(1000);  //Simulates API lag
-            setBooks(books_data);
+            await sleep(500);
+            await fetch('/books.json').then(response => response.json()).then(data => setBooksData(data));
         }
         fetchData();
     }, []);
