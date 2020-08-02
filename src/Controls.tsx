@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Formik, Form, Field, useFormikContext } from 'formik';
 import './App.css';
 import './BookList.tsx';
 
@@ -23,63 +24,40 @@ type ControlsProps = {
 }
 
 function Controls({filters, categories, filterHandler}: ControlsProps) {
-    const [titleSearchTerm, setTitleSearchTerm] = useState("");
-    const [authorSearchTerm, setAuthorSearchTerm] = useState("");
-    const [ownedSearchTerm, setOwnedSearchTerm] = useState("");
-    const [categorySearchTerm, setCategorySearchTerm] = useState("");
-
-    useEffect(() => {
-
-        filterHandler({
-            title:titleSearchTerm.toLowerCase(),
-            author:authorSearchTerm.toLowerCase(),
-            owned:ownedSearchTerm,
-            category:categorySearchTerm
-        });
-    },[titleSearchTerm,authorSearchTerm,ownedSearchTerm,categorySearchTerm,filterHandler]);
-
+    const submitFilters = (values: filters) => {filterHandler(values)};
     return(
         <div className="controls">
-            <TitleSearch title={titleSearchTerm} handler={setTitleSearchTerm}/>
-            <AuthorSearch author={authorSearchTerm} handler={setAuthorSearchTerm}/>
-            <OwnedSearch owned={ownedSearchTerm} handler={setOwnedSearchTerm}/>
-            <CategoriesSearch categories={categories} category={categorySearchTerm} handler={setCategorySearchTerm}/>
+            <Formik initialValues={emptyFilters} onSubmit={submitFilters}>
+                <Form>
+                    <TitleSearch/>
+                    <AuthorSearch/>
+                    <OwnedSearch/>
+                    <CategoriesSearch categories={categories}/>
+                </Form>
+            </Formik>
         </div>
     );
 }
 
-type TitleSearchProps = {
-    title: string,
-    handler: Function
-}
-function TitleSearch({title, handler}:TitleSearchProps) {
-    const handleChange = (e:any) => {handler(e.target.value);};
+function TitleSearch() {
+    const formik = useFormikContext();
     return(
-        <div>Title: <input type="text" value={title} onChange={handleChange} placeholder="Title"/></div>
+        <div>Title: <Field id='title' name='title' type="text" onChange={(e:any) => {formik.handleChange(e); formik.submitForm()}} placeholder="Title"/></div>
     );
 }
 
-type AuthorSearchProps = {
-    author: string,
-    handler: Function
-}
-function AuthorSearch({author, handler}:AuthorSearchProps) {
-    const handleChange = (e:any) => {handler(e.target.value);};
+function AuthorSearch() {
+    const formik = useFormikContext();
     return(
-        <div>Author:&nbsp;<input type="text" value={author} onChange={handleChange} placeholder="Author"/></div>
+        <div>Author:&nbsp;<Field id='author' name='author' type="text" onChange={(e:any) => {formik.handleChange(e); formik.submitForm()}} placeholder="Author"/></div>
     );
 }
 
-type OwnedSearchProps = {
-    owned: string,
-    handler: Function
-}
-function OwnedSearch({owned, handler}:OwnedSearchProps) {
-    const handleChange = (e:any) => {handler(e.target.value);};
-    
+function OwnedSearch() {
+    const formik = useFormikContext();
     return(
         <div>Owned:&nbsp; 
-            <select value={owned} onChange={handleChange}>
+            <select  id='owned' name='owned' onChange={(e:any) => {formik.handleChange(e); formik.submitForm()}}>
                 <option value=""></option>
                 <option value="physical">Physical</option>
                 <option value="digital">Digital</option>
@@ -92,28 +70,15 @@ function OwnedSearch({owned, handler}:OwnedSearchProps) {
 
 type CategorySearchProps = {
     categories: Set<string>,
-    category: string,
-    handler: Function
 }
-function CategoriesSearch({categories, category, handler}:CategorySearchProps) {
-    const handleChange = (e:any) => {handler(e.target.value);};
+function CategoriesSearch({categories}:CategorySearchProps) {
+    const formik = useFormikContext();
     return(
         <div>Category:&nbsp; 
-            <select value={category} onChange={handleChange}>
+            <select  id='category' name='category' onChange={(e:any) => {formik.handleChange(e); formik.submitForm()}}>
                 <option value=""></option>
                 {Array.from(categories).map(c => <option key={c} value={c}>{c}</option>)}
             </select>
-        </div>
-    );
-}
-
-type FilterDisplayProps = {
-    filters: Object
-}
-function FilterDisplay({filters}:FilterDisplayProps) {
-    return(
-        <div className="filter-list">
-        {Object.entries(filters).map((filter) => filter[1] && <span key={filter[0]} className="filter-entry">{filter[0]}:{filter[1].toString()}</span>)}
         </div>
     );
 }
