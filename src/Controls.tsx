@@ -27,7 +27,7 @@ function Controls({filters, categories, filterHandler}: ControlsProps) {
     const submitFilters = (values: filters) => {filterHandler(values)};
     return(
         <div className="controls">
-            <Formik initialValues={emptyFilters} onSubmit={submitFilters}>
+            <Formik initialValues={filters} onSubmit={submitFilters}>
                 <Form>
                     <TitleSearch/>
                     <AuthorSearch/>

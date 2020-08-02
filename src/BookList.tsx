@@ -22,17 +22,19 @@ type BookListProps = {
 }
   
 function BookList({initialBooks}: BookListProps) {
-    const [booksData, setBooksData] = useState(new Array<book>());
+    const [booksData, setBooksData] = useState(initialBooks);
     const [books, setBooks] = useState(initialBooks);
     const [categories, setCategories] = useState(new Set<string>());
     const [filters, setFilters] = useState(emptyFilters);
   
+    const fetchData = async () => {
+        await sleep(500);
+        await fetch('/books.json').then(response => response.json()).then(data => setBooksData(data));
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            await sleep(500);
-            await fetch('/books.json').then(response => response.json()).then(data => setBooksData(data));
-        }
         fetchData();
+        setInterval(fetchData, 30000);
     }, []);
 
     useEffect(() => {
